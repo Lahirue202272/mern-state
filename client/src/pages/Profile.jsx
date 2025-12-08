@@ -132,6 +132,24 @@ export default function Profile() {
       setShowListingError(true);
     }
   };
+
+  const handleListingDelete = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: 'DELETE',
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      
+      setUserListings((prev) => prev.filter((listing) => listing._id !== listingId));
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
   return (
     <div className='p-3 max-w-lg mx-auto'>
       <h1 className='text-3xl font-semibold text-center
@@ -178,7 +196,7 @@ export default function Profile() {
 
       <p className='text-red-700 mt-5'>{error ? error: ''}</p>
       <p className='text-green-700 mt-5'>{updateSuccess ? "Profile updated successfully!": ''}</p>
-      <button onClick={handleShowListings} className='text-green-700 w-full'>Show Listings</button>
+      <button onClick={handleShowListings} className='text-green-700 w-full cursor-pointer'>Show Listings</button>
       <p className='text-red-700 mt-5'>{showListingError ? "Failed to load listings." : ''}</p>
       { userListings && userListings.length > 0 && 
       <div className="flex flex-col gap-4">
@@ -194,8 +212,8 @@ export default function Profile() {
             <p>{listing.name}</p>
           </Link>
           <div className="flex flex-col items-center">
-            <button className='text-red-700 uppercase'>Delete</button> 
-            <button className='text-green-700 uppercase'>Edit</button>         
+            <button onClick={() => handleListingDelete(listing._id)} className='text-red-700 uppercase cursor-pointer'>Delete</button> 
+            <button className='text-green-700 uppercase cursor-pointer'>Edit</button>
           </div>
         </div>
       )) }       
