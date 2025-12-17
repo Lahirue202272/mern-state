@@ -15,7 +15,7 @@ export default function Search() {
     })
     const [loading, setLoading] = useState(false);
     const [listings, setListings] = useState([]);
-    console.log(listings);
+    const [showMore, setShowMore] = useState(false);
 
   const handlechange = (e) => {
     if(e.target.id === 'all'|| e.target.id === 'rent' || e.target.id === 'sale'){
@@ -77,9 +77,15 @@ export default function Search() {
 
         const fetchListings = async () => {
             setLoading(true);
+            setShowMore(false);
             const searchQuery = urlParams.toString();
             const res = await fetch(`/api/listing/get?${searchQuery}`);
             const data = await res.json();
+            if (data.length>8){
+                setShowMore(true);
+            } else {
+                setShowMore(false);
+            }
             setListings(data);
             setLoading(false);
         };
@@ -89,6 +95,20 @@ export default function Search() {
 
 
     }, [location.search]);
+    const onShowMoreClick = async () => {
+        const numberofListings = listings.length;
+        const startIndex = numberofListings;
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('startIndex', startIndex);
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/listing/get?${searchQuery}`);
+        const data = await res.json();
+        if (data.length < 9){
+            setShowMore(false);
+        }
+        setListings([...listings, ...data]);
+        setLoading(false);
+    };
   return (
     <div className='flex flex-col md:flex-row'>
         <div className="p-7 border-b-2 border-gray-300 md:border-r-2
@@ -169,7 +189,7 @@ export default function Search() {
         </div>
         <div className="flex-1">
             <h1 className='text-3xl font-semibold border-b border-gray-300 p-3 text-slate-700 mt-5 md:min-w-screen'>Listing results:</h1>
-            <div className="p-7 flex flex-wrap gap-4">
+            <div className="p-7 flex flex-wrap gap-6">
                 {!loading && listings.length === 0 && (
                     <p className='text-xl text-slate-700'>No listings found!</p>
                 )}
@@ -177,6 +197,13 @@ export default function Search() {
                     <p className='text-xl text-slate-700 '>Loading...</p>
                 )}
                 {!loading && listings && listings.map((listing) => <ListingItem key={listing._id} listing={listing} />)}
+                { showMore && (
+                    <button
+                        onClick={onShowMoreClick}
+                        className='text-green-700 hover:underline p-7 text-center w-full'>
+                        Show More
+                        </button>
+                )}
             </div>
         </div>
     </div>
