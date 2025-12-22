@@ -116,6 +116,8 @@ jobs:
             exit 1
           else
             echo "DEPLOYMENT_FAILED=false" >> $GITHUB_ENV
+          fi
+
 
       - name: Set output for deploy result
         run: echo "result=${DEPLOYMENT_FAILED}" >> $GITHUB_OUTPUT
