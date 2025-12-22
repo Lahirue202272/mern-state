@@ -111,12 +111,13 @@ jobs:
         run: |
           RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X GET "${{ secrets.RENDER_DEPLOY_HOOK }}")
           echo "HTTP Response: $RESPONSE"
-          if [ "$RESPONSE" -ne 200 ]; then
+          if [ "$RESPONSE" -ne 200 ] && [ "$RESPONSE" -ne 202 ]; then
             echo "DEPLOYMENT_FAILED=true" >> $GITHUB_ENV
             exit 1
           else
             echo "DEPLOYMENT_FAILED=false" >> $GITHUB_ENV
           fi
+
 
 
       - name: Set output for deploy result
