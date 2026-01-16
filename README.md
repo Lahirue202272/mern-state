@@ -83,14 +83,30 @@ It follows industry best practices for authentication, database optimization, an
 - CI/CD Pipeline (GitHub Actions / Render Auto Deploy)
 
 ---
+##  Getting Started && Environment Variables
 
-##  Environment Variables
+```bash
+# Clone the repository
+git clone https://github.com/Lahirue20272/mern-state.git
+
+# Install backend dependencies
+npm install
+
+# Install frontend dependencies
+cd client
+npm install
+
+# Run the project
+npm run dev
+
+
 
 Create a `.env` file in the root directory and add the following:
 
-```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=your_jwt_secret
 GOOGLE_CLIENT_ID=your_google_client_id
 GOOGLE_CLIENT_SECRET=your_google_client_secret
 FIREBASE_API_KEY=your_firebase_api_key
+
+
