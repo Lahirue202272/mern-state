@@ -133,9 +133,9 @@ jobs:
       - name: Print deploy result
         run: |
           if [ "${{ needs.deploy.outputs.result }}" == "true" ]; then
-            echo "🚨 Deployment failed!"
+            echo "Deployment failed!"
           else
-            echo "✅ Deployment succeeded!"
+            echo "Deployment succeeded!"
           fi
 
   # =========================
@@ -148,6 +148,6 @@ jobs:
     steps:
       - name: Output failure message
         run: |
-          echo "🚨 CI/CD Pipeline Failed!"
+          echo "CI/CD Pipeline Failed!"
           echo "Check logs of individual jobs above."
           echo "Simple failure report for now."
